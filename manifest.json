@@ -1,0 +1,30 @@
+{
+  "name": "optarithm",
+  "description": "colorize numbers",
+  "version": "0.1",
+  "permissions": [
+    "tabs"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content/SplitText.js",
+            "js/content/main.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["js/background/state.js",
+                "js/background/colors.js",
+                "js/background/main.js"],
+    "persistent": false
+  },
+  "browser_action": {
+      "default_title": "optarithm",
+      "default_icon": {
+        "16": "icons/active/icon16.png",
+        "24": "icons/active/icon24.png",
+        "32": "icons/active/icon32.png"
+      }
+  },
+  "manifest_version": 2
+}
