@@ -1,6 +1,5 @@
 var small_primes = [2,3,5,7,11,13];
 
-// TODO set via prefs
 var rgb_values = [
   [0,0,0], // 0: black
   [0xc7, 0xc7, 0xc7], // 1: gray
@@ -17,6 +16,7 @@ var rgb_values = [
   [0x31, 0x2b, 0x8d], // 12: blue-2/red
   [0xe6, 0x9f, 0xe0]  // 13: pink
 ];
+
 
 /**
  * get a number's rgb value based on leading digits

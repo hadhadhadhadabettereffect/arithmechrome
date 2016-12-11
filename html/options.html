@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Optarithm Options</title>
+    <style>
+        .row {
+            width: 100%;
+            display: block;
+        }
+        .preview {
+            height: 14px;
+            width: 14px;
+            border-radius: 2px;
+            border: 1px solid lightgray;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div id="digits">
+    <div class="row">
+        <label>0</label>
+        <div class="preview" id="p0"></div>
+        <input type="text" id="n0">
+    </div>
+    <div class="row">
+        <label>1</label>
+        <div class="preview" id="p1"></div>
+        <input type="text" id="n1">
+    </div>
+    <div class="row">
+        <label>2</label>
+        <div class="preview" id="p2"></div>
+        <input type="text" id="n2">
+    </div>
+    <div class="row">
+        <label>3</label>
+        <div class="preview" id="p3"></div>
+        <input type="text" id="n3">
+    </div>
+    <div class="row">
+        <label>4</label>
+        <div class="preview" id="p4"></div>
+        <input type="text" id="n4">
+    </div>
+    <div class="row">
+        <label>5</label>
+        <div class="preview" id="p5"></div>
+        <input type="text" id="n5">
+    </div>
+    <div class="row">
+        <label>6</label>
+        <div class="preview" id="p6"></div>
+        <input type="text" id="n6">
+    </div>
+    <div class="row">
+        <label>7</label>
+        <div class="preview" id="p7"></div>
+        <input type="text" id="n7">
+    </div>
+    <div class="row">
+        <label>8</label>
+        <div class="preview" id="p8"></div>
+        <input type="text" id="n8">
+    </div>
+    <div class="row">
+        <label>9</label>
+        <div class="preview" id="p9"></div>
+        <input type="text" id="n9">
+    </div>
+</div>
+
+<div class="row">
+    <label>
+        <input type="checkbox" id="active">
+        Active by default
+    </label>
+</div>
+<div class="row">
+    <label>
+        <input type="checkbox" id="individual">
+        Colorize digits individually
+    </label>
+</div>
+
+<div id="status"></div>
+<button id="save">Save</button>
+
+<script src="../js/options.js"></script>
+</body>
+</html>

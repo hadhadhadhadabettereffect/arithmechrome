@@ -1,5 +1,6 @@
 var busy = false;
 var queue = [];
+var individual = false;
 
 function checkNextColor() {
     var obj = queue.pop();
@@ -10,6 +11,20 @@ function checkNextColor() {
     if (queue.length) setTimeout(checkNextColor, 0);
     else busy = false;
 }
+
+function setStoredValues(items) {
+    rgb_values = items.values;
+    individual = items.individual;
+    setActive(Boolean(items.active));
+}
+
+chrome.storage.sync.get({
+    individual: individual,
+    values: rgb_values,
+    active: active
+}, setStoredValues);
+
+chrome.storage.onChanged.addListener(setStoredValues);
 
 /**
  * add message data to queue, start loop if not running

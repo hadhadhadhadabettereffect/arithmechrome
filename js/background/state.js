@@ -12,12 +12,18 @@ var inactiveIcon = {
 
 var active = true;
 
+function setActive(a) {
+    if (a !== active) {
+        active = !active;
+        // update icon
+        chrome.browserAction.setIcon({
+            path: active ? activeIcon : inactiveIcon
+        });
+    }
+}
+
 // TODO toggle on/off for active tab
 chrome.browserAction.onClicked.addListener(function(tab) {
     // toggle active
-    active = !active;
-    // update icon
-    chrome.browserAction.setIcon({
-        path: active ? activeIcon : inactiveIcon
-    });
+    setActive(!active);
 });
