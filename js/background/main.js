@@ -5,6 +5,7 @@ var individual = false;
 function checkNextColor() {
     var obj = queue.pop();
     chrome.tabs.sendMessage(obj.id, {
+        msgType: "colors",
         index: obj.data.index,
         colors: obj.data.values.map(colorValue)
     });

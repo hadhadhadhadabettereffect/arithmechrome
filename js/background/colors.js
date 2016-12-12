@@ -17,7 +17,6 @@ var rgb_values = [
   [0xe6, 0x9f, 0xe0]  // 13: pink
 ];
 
-
 /**
  * get a number's rgb value based on leading digits
  * @param  {number} n number to check

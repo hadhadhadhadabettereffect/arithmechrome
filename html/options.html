@@ -14,6 +14,9 @@
             border: 1px solid lightgray;
             display: inline-block;
         }
+        #status {
+            min-height: 20px;
+        }
     </style>
 </head>
 <body>
@@ -71,6 +74,8 @@
     </div>
 </div>
 
+<hr/>
+
 <div class="row">
     <label>
         <input type="checkbox" id="active">
@@ -80,9 +85,23 @@
 <div class="row">
     <label>
         <input type="checkbox" id="individual">
-        Colorize digits individually
+        Color digits individually
     </label>
 </div>
+<div class="row">
+    <label>
+        <input type="checkbox" id="factorize">
+        Color by prime factors
+    </label>
+</div>
+<div class="row">
+    <label>
+        <input type="checkbox" id="leading">
+        Color by most significant digits
+    </label>
+</div>
+
+<hr/>
 
 <div id="status"></div>
 <button id="save">Save</button>

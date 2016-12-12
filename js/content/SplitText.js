@@ -50,3 +50,11 @@ SplitText.prototype.wrapNumbers = function (colors) {
     }
     node.normalize();
 };
+
+/**
+ * remove added span tags
+ */
+SplitText.prototype.revert = function () {
+    this.node.innerHTML = this.node.textContent;
+    this.node.normalize();
+};

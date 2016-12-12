@@ -72,6 +72,15 @@ function revert_value(d) {
     document.getElementById('p' + d).style.backgroundColor = hex;
 }
 
+function showMessage(txt) {
+    var status = document.getElementById('status');
+    status.textContent = txt;
+
+    setTimeout(function() {
+        status.textContent = '';
+    }, 750);
+}
+
 /**
  * save changes
  */
@@ -82,12 +91,7 @@ function save_options() {
         active: document.getElementById("active").checked
     }, function() {
         // Update status to let user know options were saved.
-        var status = document.getElementById('status');
-        status.textContent = 'Options saved.';
-
-        setTimeout(function() {
-            status.textContent = '';
-        }, 750);
+        showMessage("Options saved.");
     });
 }
 
@@ -119,7 +123,10 @@ document.getElementById("digits").addEventListener("focusout", function(event) {
     var val = normalizeHex(event.target.value);
     var d = parseInt(event.target.id.substring(1));
     // revert value if unable to normalize
-    if (val.length === 0) return revert_value(d);
+    if (val.length === 0) {
+        showMessage(":?");
+        return revert_value(d);
+    }
     // set input text to normalized version
     if (val != event.target.value) {
         event.target.value = val;

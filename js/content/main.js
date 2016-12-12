@@ -1,16 +1,18 @@
 var currentNode, iterator;
 var items = [];
-var currentItem = 0;
+var revertIndex = 0;
+var sendIndex = 0;
+var splitIndex = 0;
 var count = 0;
 
 /**
  * send values to background.js to translate into colors
  */
 function sendValues () {
-    if (currentItem >= count) return;
+    if (sendIndex >= count) return;
     chrome.runtime.sendMessage({
-        index: currentItem,
-        values: items[currentItem++].getNumbers()
+        index: sendIndex,
+        values: items[sendIndex++].getNumbers()
     });
     setTimeout(sendValues, 0);
 }
@@ -21,14 +23,26 @@ function sendValues () {
 function doTheSplits (start) {
     var end;
     do {
-        if ((!items[currentItem].split()) && (++currentItem >= count)) {
-            currentItem = 0;
+        if ((!items[splitIndex].split()) && (++splitIndex >= count)) {
+            splitIndex = 0;
+            sendIndex = 0;
             setTimeout(sendValues, 0);
             return;
         }
         end = performance.now();
     } while (end - start < 3);
     requestAnimationFrame(doTheSplits);
+}
+
+/**
+ * remove added spans, revert split nodes to single strings
+ */
+function removeSpans (start) {
+    do {
+        items[revertIndex].revert();
+        end = performance.now();
+    } while (++revertIndex < count && end - start < 3);
+    if (revertIndex < count) requestAnimationFrame(removeSpans);
 }
 
 /**
@@ -42,20 +56,15 @@ function iterate () {
         setTimeout(iterate, 0);
     } else {
         currentNode = iterator = null;
+        splitIndex = 0;
         requestAnimationFrame(doTheSplits);
     }
 }
 
-chrome.runtime.onMessage.addListener(
-    function(msg, sender, sendResponse) {
-        items[msg.index].wrapNumbers(msg.colors);
-    }
-);
-
 /**
  * create node iterator, start loop
  */
-void function initIterator () {
+function initIterator () {
     iterator = document.createNodeIterator(
         document.body,
         NodeFilter.SHOW_ELEMENT,
@@ -75,4 +84,30 @@ void function initIterator () {
         }
     );
     setTimeout(iterate, 0);
-}();
+}
+
+chrome.runtime.onMessage.addListener(
+    function(msg, sender, sendResponse) {
+        switch (msg.msgType) {
+            case "colors":
+                items[msg.index].wrapNumbers(msg.colors);
+                break;
+
+            case "parse":
+                if (count) {
+                    sendIndex = 0;
+                    sendValues();
+                } else {
+                    initIterator();
+                }
+                break;
+
+            case "hide":
+                if (count) {
+                    revertIndex = 0;
+                    requestAnimationFrame(removeSpans);
+                }
+                break;
+        }
+    }
+);

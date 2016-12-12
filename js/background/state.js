@@ -10,20 +10,31 @@ var inactiveIcon = {
     "32": "icons/inactive/icon32.png"
 };
 
-var active = true;
+var active = false;
 
+/**
+ * set active state
+ * @param {boolean} a - true if active
+ */
 function setActive(a) {
-    if (a !== active) {
+    if (a != active) {
         active = !active;
+        var msgType = active ? "parse" : "hide";
         // update icon
         chrome.browserAction.setIcon({
             path: active ? activeIcon : inactiveIcon
         });
+        // signal change
+        chrome.tabs.query({}, function (tabs) {
+            for (var tab of tabs) {
+                chrome.tabs.sendMessage(tab.id, {
+                    msgType: msgType
+                });
+            }
+        });
     }
 }
 
-// TODO toggle on/off for active tab
 chrome.browserAction.onClicked.addListener(function(tab) {
-    // toggle active
     setActive(!active);
 });
