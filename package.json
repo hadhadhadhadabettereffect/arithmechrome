@@ -1,0 +1,25 @@
+{
+  "name": "arithmechrome",
+  "version": "1.0.0",
+  "description": "chrome extension to colorize numbers in text",
+  "main": "build/main.js",
+  "scripts": {
+    "build": "node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hadhadhadhadabettereffect/optarithm.git"
+  },
+  "author": "Eric Birkeland <ericjbirkeland@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hadhadhadhadabettereffect/optarithm/issues"
+  },
+  "homepage": "https://github.com/hadhadhadhadabettereffect/optarithm#readme",
+  "devDependencies": {
+    "browserify": "^16.1.1",
+    "tsify": "^3.0.4",
+    "typescript": "^2.7.2"
+  }
+}

@@ -32,10 +32,10 @@
         "24": "icons/active/icon24.png",
         "32": "icons/active/icon32.png"
       },
-      "default_popup": "html/options.html"
+      "default_popup": "dist/options.html"
   },
   "options_ui": {
-    "page": "html/options.html",
+    "page": "dist/options.html",
     "chrome_style": true
   },
   "manifest_version": 2
