@@ -3,7 +3,8 @@ import { options as defaultOptions } from "./defaults";
 declare var chrome;
 declare const enum OptionEl {
     _c0, _c1, _c2, _c3, _c4, _c5,
-    _c6, _c7, _c8, _c9, _active,
+    _c6, _c7, _c8, _c9,
+    _active, _onlybody,
     _message, count,
 
     c0 = 1 << _c0,
@@ -17,12 +18,15 @@ declare const enum OptionEl {
     c8 = 1 << _c8,
     c9 = 1 << _c9,
     active = 1 << _active,
+    onlybody = 1 << _onlybody,
     message = 1 << _message,
     all = (1 << count) -1
 }
 
 const el_checkbox_active: HTMLInputElement =
     <HTMLInputElement> document.getElementById("active");
+const el_checkbox_onlybody: HTMLInputElement =
+    <HTMLInputElement> document.getElementById("onlybody");
 const el_span_status: HTMLSpanElement =
     <HTMLSpanElement> document.getElementById("status");
 const arr_el_input_colors: HTMLInputElement[] = [
@@ -102,7 +106,7 @@ function onUpdateColor (event) {
 function saveOptions () {
     // set bool values from checkboxes
     options.active = el_checkbox_active.checked;
-    
+    options.onlybody = el_checkbox_onlybody.checked;    
     chrome.storage.sync.set(options, function() {
         popupMsg = "Options saved.";
         unsavedChanges = 0;
@@ -149,26 +153,35 @@ function applyDomUpdates () {
  * @param {number} i OptionEl index of el to update
  */
 function updateDomNode (i: number) {
-    // 0-9 == digits
-    if (i < 10) {
-        let hex = options.colors[i];
-        // update input with normalized hex string
-        arr_el_input_colors[i].value = hex;
-        // set preview div color
-        arr_el_div_colorsquares[i].style.background = hex;
-    } else if (i === OptionEl._active) {
-        el_checkbox_active.checked = options.active;
-    } else if (i === OptionEl._message) {
-        // set msg text
-        el_span_status.textContent = popupMsg;
+    switch (i) {
+        case OptionEl._message:
+            // set msg text
+            el_span_status.textContent = popupMsg;
 
-        // if popupMsg, set timeout to clear msg after 1200ms
-        if (popupMsg.length) {
-            popupMsg = "";
-            changes |= OptionEl.message;
-            setTimeout(signalUpdate, 1200);
-        }
+            // if popupMsg, set timeout to clear msg after 1200ms
+            if (popupMsg.length) {
+                popupMsg = "";
+                changes |= OptionEl.message;
+                setTimeout(signalUpdate, 1200);
+            }
+            break;
+        
+        case OptionEl._active:
+            el_checkbox_active.checked = options.active;
+            break;
+            
+        case OptionEl._onlybody:
+            el_checkbox_onlybody.checked = options.onlybody;
+            break;
 
+        // colors
+        default:
+            let hex = options.colors[i];
+            // update input with normalized hex string
+            arr_el_input_colors[i].value = hex;
+            // set preview div color
+            arr_el_div_colorsquares[i].style.background = hex;
+            break;
     }
 }
 
