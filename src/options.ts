@@ -81,7 +81,7 @@ function onUpdateColor (event) {
     var d = parseInt(event.target.id.substring(1));
     
     // return if no change was made
-    if (val == options.colors[d]) return;
+    if (val.length && val == options.colors[d]) return;
 
     // mark value as updated
     changes |= (1 << d);
@@ -132,7 +132,7 @@ function signalUpdate () {
  */
 function applyDomUpdates () {
     // check for changes and apply updates
-    for (let i = OptionEl.count; i !== 0; --i) {
+    for (let i = OptionEl.count; i >= 0; --i) {
         if (changes & (1<<i)) {
             changes ^= (1<<i);
             updateDomNode(i);
