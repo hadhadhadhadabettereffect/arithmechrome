@@ -1,5 +1,13 @@
-var iterator;
-var nodes = [];
+var iterator, styleNode;
+var colors, nodes = [];
+
+chrome.runtime.onMessage.addListener(
+    function(msg, sender, sendResponse) {
+        colors = msg;
+        requestAnimationFrame(writeCSS);
+        if (!iterator) startIterator();
+    }
+);
 
 /**
  * traverse dom via node iterator, wrap digits with styled spans
@@ -18,17 +26,23 @@ function wrapNumbers () {
         end = performance.now();
     } while (end - start < 3);
     if (currentNode) requestAnimationFrame(wrapNumbers)
-    else requestAnimationFrame(swapHTML);
+    else {
+        // reversing order so calling nodes.pop() updates from top to bottom
+        nodes = nodes.reverse();
+        requestAnimationFrame(swapHTML);
+    }
 }
 
+/**
+ * for each node in the nodes array, wrap digit chars with spans
+ * and assign css class names based on the wrapped digits
+ */
 function swapHTML () {
     var end, start = performance.now();
     var el;
     do {
         if (!nodes.length) break;
         el = nodes.pop();
-        // wrap the individual digit chars with spans
-        // with css class names corresponding to the wrapped digit
         el.innerHTML = el.textContent.replace(/\d/g,
             "<span class='digit--$&'>$&</span>");
     } while (end - start < 3);
@@ -58,12 +72,17 @@ function startIterator () {
     requestAnimationFrame(wrapNumbers);
 }
 
-chrome.runtime.onMessage.addListener(
-    function(msg, sender, sendResponse) {
-        switch (msg.msgType) {
-            case MsgType.parse:
-                startIterator();
-                break;
-        }
+/**
+ * add style tag to head with color options
+ */
+function writeCSS () {
+    if (!styleNode) {
+        styleNode = document.createElement("style");
+        document.head.appendChild(styleNode);
     }
-);
+    var styleText = "";
+    for (let i=0; i<10; ++i) {
+        styleText += ".digit--" + i + "{color:" + colors[i] + ";}";
+    }
+    styleNode.innerHTML = styleText;
+}

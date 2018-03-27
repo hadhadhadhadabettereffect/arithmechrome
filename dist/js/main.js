@@ -1,8 +1,14 @@
 (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 
 },{}],2:[function(require,module,exports){
-var iterator;
-var nodes = [];
+var iterator, styleNode;
+var colors, nodes = [];
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    colors = msg;
+    requestAnimationFrame(writeCSS);
+    if (!iterator)
+        startIterator();
+});
 /**
  * traverse dom via node iterator, wrap digits with styled spans
  */
@@ -22,9 +28,15 @@ function wrapNumbers() {
     } while (end - start < 3);
     if (currentNode)
         requestAnimationFrame(wrapNumbers);
-    else
+    else {
+        nodes = nodes.reverse();
         requestAnimationFrame(swapHTML);
+    }
 }
+/**
+ * for each node in the nodes array, wrap digit chars with spans
+ * and assign css class names based on the wrapped digits
+ */
 function swapHTML() {
     var end, start = performance.now();
     var el;
@@ -32,8 +44,6 @@ function swapHTML() {
         if (!nodes.length)
             break;
         el = nodes.pop();
-        // wrap the individual digit chars with spans
-        // with css class names corresponding to the wrapped digit
         el.innerHTML = el.textContent.replace(/\d/g, "<span class='digit--$&'>$&</span>");
     } while (end - start < 3);
     if (nodes.length)
@@ -56,12 +66,19 @@ function startIterator() {
     });
     requestAnimationFrame(wrapNumbers);
 }
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-    switch (msg.msgType) {
-        case 0 /* parse */:
-            startIterator();
-            break;
+/**
+ * add style tag to head with color options
+ */
+function writeCSS() {
+    if (!styleNode) {
+        styleNode = document.createElement("style");
+        document.head.appendChild(styleNode);
     }
-});
+    var styleText = "";
+    for (var i = 0; i < 10; ++i) {
+        styleText += ".digit--" + i + "{color:" + colors[i] + ";}";
+    }
+    styleNode.innerHTML = styleText;
+}
 
 },{}]},{},[1,2]);
