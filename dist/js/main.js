@@ -29,6 +29,7 @@ function wrapNumbers() {
     if (currentNode)
         requestAnimationFrame(wrapNumbers);
     else {
+        // reversing order so calling nodes.pop() updates from top to bottom
         nodes = nodes.reverse();
         requestAnimationFrame(swapHTML);
     }
