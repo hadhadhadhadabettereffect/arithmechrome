@@ -10,19 +10,17 @@
   },
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "webNavigation"
   ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["js/content/SplitText.js",
-            "js/content/main.js"]
+      "js": ["js/main.js"]
     }
   ],
   "background": {
-    "scripts": ["js/background/state.js",
-                "js/background/colors.js",
-                "js/background/main.js"],
+    "scripts": ["js/background.js"],
     "persistent": false
   },
   "browser_action": {
@@ -32,10 +30,10 @@
         "24": "icons/active/icon24.png",
         "32": "icons/active/icon32.png"
       },
-      "default_popup": "dist/options.html"
+      "default_popup": "options.html"
   },
   "options_ui": {
-    "page": "dist/options.html",
+    "page": "options.html",
     "chrome_style": true
   },
   "manifest_version": 2

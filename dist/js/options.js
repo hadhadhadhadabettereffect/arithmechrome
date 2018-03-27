@@ -21,6 +21,8 @@ exports.options = {
 };
 
 },{}],2:[function(require,module,exports){
+
+},{}],3:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var defaults_1 = require("./defaults");
@@ -190,4 +192,4 @@ function normalizeHex(hex) {
     return '#' + hex;
 }
 
-},{"./defaults":1}]},{},[2]);
+},{"./defaults":1}]},{},[2,3]);
