@@ -1,8 +1,6 @@
 import { options as defaultOptions } from "./defaults";
+import "./components/Toggle";
 
-
-const el_checkbox_active: HTMLInputElement =
-    <HTMLInputElement> document.getElementById("active");
 const el_checkbox_onlybody: HTMLInputElement =
     <HTMLInputElement> document.getElementById("onlybody");
 const el_span_status: HTMLSpanElement =
@@ -31,9 +29,10 @@ const arr_el_div_colorsquares: HTMLInputElement[] = [
     <HTMLInputElement> document.getElementById("p8"),
     <HTMLInputElement> document.getElementById("p9")
 ];
+var el_active_toggle;
 
 // init with default values
-var options;
+var options = defaultOptions;
 var popupMsg = "";
 var changes = OptionEl.all;
 var unsavedChanges = 0;
@@ -44,6 +43,16 @@ document.addEventListener('DOMContentLoaded', initOptions);
 document.getElementById('save').addEventListener('click', saveOptions);
 document.getElementById("digits").addEventListener("focusout", onUpdateColor);
 
+customElements.whenDefined("active-toggle").then(() => {
+    el_active_toggle = document.createElement("active-toggle");
+    document.getElementById("activeToggle").appendChild(el_active_toggle);
+    el_active_toggle.addEventListener("toggle", onActiveToggle);
+});
+
+function onActiveToggle () {
+    options.active = el_active_toggle.checked;
+    chrome.storage.sync.set(options);
+}
 
 /**
  * populate input values with stored values or defaults on load
@@ -51,6 +60,7 @@ document.getElementById("digits").addEventListener("focusout", onUpdateColor);
 function initOptions () {
     chrome.storage.sync.get(defaultOptions, function (storedOptions) {
         options = storedOptions;
+        el_active_toggle.checked = options.active;
         signalUpdate();
     });
 }
@@ -83,7 +93,7 @@ function onUpdateColor (event) {
  */
 function saveOptions () {
     // set bool values from checkboxes
-    options.active = el_checkbox_active.checked;
+    options.active = el_active_toggle.checked;
     options.onlybody = el_checkbox_onlybody.checked;    
     chrome.storage.sync.set(options, function() {
         popupMsg = "Options saved.";
@@ -145,11 +155,7 @@ function updateDomNode (i: number) {
             break;
         
         case OptionEl._active:
-            el_checkbox_active.checked = options.active;
-            break;
-            
         case OptionEl._onlybody:
-            el_checkbox_onlybody.checked = options.onlybody;
             break;
 
         // colors

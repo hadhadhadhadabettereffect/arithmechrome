@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
  */
 function wrapNumbers() {
     var end, start = performance.now();
-    var currentNode = iterator.nextNode();
+    let currentNode = iterator.nextNode();
     do {
         // if text node contains any number chars
         if (currentNode && /\d/.test(currentNode.textContent)) {
@@ -81,7 +81,7 @@ function writeCSS() {
         document.head.appendChild(styleNode);
     }
     var styleText = "";
-    for (var i = 0; i < 10; ++i) {
+    for (let i = 0; i < 10; ++i) {
         styleText += ".digit--" + i + "{color:" + colors[i] + ";}";
     }
     styleNode.innerHTML = styleText;

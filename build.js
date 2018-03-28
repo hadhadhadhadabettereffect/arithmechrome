@@ -13,6 +13,7 @@ for (let file of ["main", "options", "background"]) {
         .add(path.join(srcDir, file + ".ts"))
         .plugin("tsify", {
             module: "commonjs",
+            target: "es6",
             baseUrl: srcDir
         })
         .bundle((err, buf) => {

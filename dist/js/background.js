@@ -1,13 +1,13 @@
 (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 "use strict";
-exports.__esModule = true;
-var defaults_1 = require("./defaults");
-var activeIcons = {
+Object.defineProperty(exports, "__esModule", { value: true });
+const defaults_1 = require("./defaults");
+const activeIcons = {
     "16": "icons/active/icon16.png",
     "24": "icons/active/icon24.png",
     "32": "icons/active/icon32.png"
 };
-var inactiveIcons = {
+const inactiveIcons = {
     "16": "icons/inactive/icon16.png",
     "24": "icons/inactive/icon24.png",
     "32": "icons/inactive/icon32.png"
@@ -58,8 +58,7 @@ function msgTab() {
     });
     // send msg to all tabs
     chrome.tabs.query({}, function (tabs) {
-        for (var _i = 0, tabs_1 = tabs; _i < tabs_1.length; _i++) {
-            var tab = tabs_1[_i];
+        for (let tab of tabs) {
             chrome.tabs.sendMessage(tab.id, msg);
         }
     });
@@ -71,7 +70,7 @@ function updateIcon() {
 
 },{"./defaults":2}],2:[function(require,module,exports){
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.options = {
     colors: [
         "#888888",

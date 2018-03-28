@@ -6,6 +6,8 @@
         .row {
             width: 100%;
             display: block;
+            padding: 4px 8px;
+            min-height: 30px;
         }
         .preview {
             height: 14px;
@@ -20,6 +22,10 @@
     </style>
 </head>
 <body>
+
+<div class="row">
+    <div id="activeToggle"></div>
+</div>
 
 <div id="digits">
     <div class="row">
@@ -75,13 +81,6 @@
 </div>
 
 <hr/>
-
-<div class="row">
-    <label>
-        <input type="checkbox" id="active">
-        Active by default
-    </label>
-</div>
 
 <div class="row">
     <label>
