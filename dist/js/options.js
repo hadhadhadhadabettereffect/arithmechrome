@@ -101,168 +101,57 @@ exports.options = {
 Object.defineProperty(exports, "__esModule", { value: true });
 const defaults_1 = require("./defaults");
 require("./components/Toggle");
-const el_span_status = document.getElementById("status");
-const arr_el_input_colors = [
-    document.getElementById("n0"),
-    document.getElementById("n1"),
-    document.getElementById("n2"),
-    document.getElementById("n3"),
-    document.getElementById("n4"),
-    document.getElementById("n5"),
-    document.getElementById("n6"),
-    document.getElementById("n7"),
-    document.getElementById("n8"),
-    document.getElementById("n9")
-];
-const arr_el_div_colorsquares = [
-    document.getElementById("p0"),
-    document.getElementById("p1"),
-    document.getElementById("p2"),
-    document.getElementById("p3"),
-    document.getElementById("p4"),
-    document.getElementById("p5"),
-    document.getElementById("p6"),
-    document.getElementById("p7"),
-    document.getElementById("p8"),
-    document.getElementById("p9")
-];
+const arr_el_input_colors = document.querySelectorAll(".color-input");
+const arr_el_undo = document.querySelectorAll(".undo");
 var el_active_toggle;
 // init with default values
 var options = defaults_1.options;
-var popupMsg = "";
-var changes = 4095 /* all */;
-var unsavedChanges = 0;
-var busy = false;
-// set listeners
-document.addEventListener('DOMContentLoaded', initOptions);
-document.getElementById('save').addEventListener('click', saveOptions);
-document.getElementById("digits").addEventListener("focusout", onUpdateColor);
+var cachedColors = options.colors;
 customElements.whenDefined("active-toggle").then(() => {
     el_active_toggle = document.createElement("active-toggle");
     document.getElementById("activeToggle").appendChild(el_active_toggle);
-    el_active_toggle.addEventListener("toggle", onActiveToggle);
+    el_active_toggle.addEventListener("toggle", function () {
+        options.active = el_active_toggle.checked;
+        chrome.storage.sync.set(options);
+    });
 });
-function onActiveToggle() {
-    options.active = el_active_toggle.checked;
-    chrome.storage.sync.set(options);
-}
-/**
- * populate input values with stored values or defaults on load
- */
-function initOptions() {
+document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
         options = storedOptions;
+        cachedColors = options.colors.slice();
         el_active_toggle.checked = options.active;
-        signalUpdate();
-    });
-}
-/**
- * validate updated input values
- */
-function onUpdateColor(event) {
-    var val = normalizeHex(event.target.value);
-    var d = parseInt(event.target.id.substring(1));
-    // return if no change was made
-    if (val.length && val == options.colors[d])
-        return;
-    // mark value as updated
-    changes |= (1 << d);
-    unsavedChanges |= (1 << d);
-    // 0-length if unable to normalize
-    if (val.length === 0)
-        popupMsg = ":?";
-    else
-        options.colors[d] = val;
-    // update dom
-    signalUpdate();
-}
-/**
- * save changes
- */
-function saveOptions() {
-    // set bool values from checkboxes
-    options.active = el_active_toggle.checked;
-    chrome.storage.sync.set(options, function () {
-        popupMsg = "Options saved.";
-        unsavedChanges = 0;
-        changes |= 2048 /* message */;
-        signalUpdate();
-    });
-}
-/*********************************
- * dom update
- */
-/**
- * called when an option gets updated.
- * sets timeout for dom update fn if not already set
- */
-function signalUpdate() {
-    if (!busy) {
-        busy = true;
-        setTimeout(applyDomUpdates, 16);
-    }
-}
-/**
- * apply changes to options panel
- */
-function applyDomUpdates() {
-    // check for changes and apply updates
-    for (let i = 12 /* count */; i >= 0; --i) {
-        if (changes & (1 << i)) {
-            changes ^= (1 << i);
-            updateDomNode(i);
-            if (changes === 0)
-                break;
+        for (let i = 0; i < 10; ++i) {
+            arr_el_input_colors[i].value = cachedColors[i];
         }
-    }
-    // set busy to false after updates finished
-    busy = false;
-}
+        // adding change listener after initial values set
+    });
+});
+document.getElementById("digits").addEventListener("change", handleColorInput);
+document.getElementById("digits").addEventListener("click", handleClickUndo);
 /**
- * update individual dom node. called from applyDomUpdates
- * @param {number} i OptionEl index of el to update
+ * when undo button is clicked, set color to cached value
  */
-function updateDomNode(i) {
-    if (i === 11 /* _message */) {
-        el_span_status.textContent = popupMsg;
-        // if popupMsg, set timeout to clear msg after 1200ms
-        if (popupMsg.length) {
-            popupMsg = "";
-            changes |= 2048 /* message */;
-            setTimeout(signalUpdate, 1200);
-        }
-    }
-    else if (i < 10) {
-        let hex = options.colors[i];
-        // update input with normalized hex string
-        arr_el_input_colors[i].value = hex;
-        // set preview div color
-        arr_el_div_colorsquares[i].style.background = hex;
+function handleClickUndo(event) {
+    if (event.target.className == "undo active") {
+        let d = event.target.id.substring(1);
+        arr_el_input_colors[d].value = cachedColors[d];
+        updateColor(d, cachedColors[d]);
     }
 }
-/*********************************
- * util
- */
+function handleColorInput(event) {
+    updateColor(event.target.id.substring(1), event.target.value);
+}
 /**
- * normalizes hex color strings
- * @param  {string} hex hex string to normalize
- * @return {string}     '#' + 6-digit hex or empty string
+ * save new color value
+ * show undo button if different from cached value
+ * @param n number whose color is being updated
+ * @param color new color value
  */
-function normalizeHex(hex) {
-    // remove non-hex characters including #
-    hex = hex.replace(/[^a-f\d]/gi, '');
-    // expand 3 digit hex colors
-    // e.g. #a7c => #aa77cc
-    if (hex.length === 3) {
-        hex = hex[0] + hex[0] +
-            hex[1] + hex[1] +
-            hex[2] + hex[2];
-    }
-    // return empty string if not valid hex color
-    if (hex.length !== 6)
-        return '';
-    // add leading # back in
-    return '#' + hex;
+function updateColor(n, color) {
+    options.colors[n] = color;
+    chrome.storage.sync.set(options);
+    arr_el_undo[n].className = cachedColors[n] == color ?
+        "undo" : "undo active";
 }
 
 },{"./components/Toggle":1,"./defaults":2}]},{},[3,4]);

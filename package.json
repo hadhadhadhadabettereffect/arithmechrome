@@ -19,7 +19,9 @@
   "homepage": "https://github.com/hadhadhadhadabettereffect/optarithm#readme",
   "devDependencies": {
     "browserify": "^16.1.1",
+    "pug": "^2.0.3",
     "tsify": "^3.0.4",
-    "typescript": "^2.7.2"
+    "typescript": "^2.7.2",
+    "uglifycss": "0.0.29"
   }
 }

@@ -1,0 +1,20 @@
+mixin colorselect(n)
+    .color-wrap
+        label= n
+        input(class="color-input" type="color" id="n"+n)
+        div(class="undo" id="u"+n) &#8634;
+
+-var n = 0;
+
+doctype html
+html
+    head
+        title #{title}
+        link(rel="stylesheet" href="options.css")
+    body
+        .row
+            #activeToggle
+        #digits
+            while n < 10
+                +colorselect(n++)
+        script(src="js/options.js")

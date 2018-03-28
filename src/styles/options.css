@@ -1,0 +1,47 @@
+input[type="color"].color-input {
+    display: inline-block;
+    width: 20px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}
+input[type="color" i]::-webkit-color-swatch {
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+}
+.row {
+    position: relative;
+    width: 100%;
+    display: block;
+    padding: 4px 8px;
+    min-height: 30px;
+}
+.preview {
+    height: 14px;
+    width: 14px;
+    border-radius: 2px;
+    border: 1px solid lightgray;
+    display: inline-block;
+}
+#status {
+    min-height: 20px;
+}
+#activeToggle {
+    position: absolute;
+    right: 30px;
+}
+.undo {
+    visibility: hidden;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    color: #39c;
+    display: block;
+    cursor: pointer;
+}
+.undo.active {
+    visibility: visible;
+}
