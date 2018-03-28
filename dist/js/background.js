@@ -2,12 +2,25 @@
 "use strict";
 exports.__esModule = true;
 var defaults_1 = require("./defaults");
+var activeIcons = {
+    "16": "icons/active/icon16.png",
+    "24": "icons/active/icon24.png",
+    "32": "icons/active/icon32.png"
+};
+var inactiveIcons = {
+    "16": "icons/inactive/icon16.png",
+    "24": "icons/inactive/icon24.png",
+    "32": "icons/inactive/icon32.png"
+};
 var options = defaults_1.options;
 chrome.storage.onChanged.addListener(onOptionsUpdate);
 chrome.tabs.onUpdated.addListener(onTabsUpdate);
 chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
     options = storedOptions;
-    msgTab();
+    if (options.active)
+        msgTab();
+    else
+        updateIcon();
 });
 function onTabsUpdate(tabId, changeInfo, tab) {
     if (changeInfo.status == "complete") {
@@ -18,6 +31,7 @@ function onOptionsUpdate(changes, areaName) {
     if (areaName == "sync") {
         if (changes.hasOwnProperty("active")) {
             options.active = changes.active.newValue;
+            updateIcon();
             if (options.active) {
                 // send parse msg to active tab if not on ignore list
                 // the send parse msg to open tabs not on ignore list
@@ -40,6 +54,10 @@ function msgTab() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, options.colors);
     });
+}
+function updateIcon() {
+    chrome.browserAction.setIcon({ path: options.active ?
+            activeIcons : inactiveIcons });
 }
 
 },{"./defaults":2}],2:[function(require,module,exports){

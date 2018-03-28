@@ -1,12 +1,23 @@
 import { options as defaultOptions } from "./defaults";
 
+const activeIcons = {
+    "16": "icons/active/icon16.png",
+    "24": "icons/active/icon24.png",
+    "32": "icons/active/icon32.png"
+};
+const inactiveIcons = {
+    "16": "icons/inactive/icon16.png",
+    "24": "icons/inactive/icon24.png",
+    "32": "icons/inactive/icon32.png"
+};
 var options = defaultOptions;
 
 chrome.storage.onChanged.addListener(onOptionsUpdate);
 chrome.tabs.onUpdated.addListener(onTabsUpdate);
 chrome.storage.sync.get(defaultOptions, function (storedOptions) {
     options = storedOptions;
-    msgTab();
+    if (options.active) msgTab();
+    else updateIcon();
 });
 
 function onTabsUpdate (tabId, changeInfo, tab) {
@@ -19,6 +30,7 @@ function onOptionsUpdate (changes, areaName) {
     if (areaName == "sync"){
         if (changes.hasOwnProperty("active")) {
             options.active = changes.active.newValue;
+            updateIcon();
             if (options.active) {
                 // send parse msg to active tab if not on ignore list
                 // the send parse msg to open tabs not on ignore list
@@ -43,4 +55,9 @@ function msgTab () {
         function (tabs) {
             chrome.tabs.sendMessage(tabs[0].id, options.colors);
     });
+}
+
+function updateIcon () {
+    chrome.browserAction.setIcon({path: options.active ?
+        activeIcons : inactiveIcons });
 }
