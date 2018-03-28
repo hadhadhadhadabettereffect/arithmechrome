@@ -1,6 +1,6 @@
 export const options = {
     colors: [
-        "#cecece", // gray
+        "#888888", // gray
         "#000000", // black
         "#67a4ff", // light blue
         "#fb1515", // red

@@ -10,8 +10,7 @@
   },
   "permissions": [
     "tabs",
-    "storage",
-    "webNavigation"
+    "storage"
   ],
   "content_scripts": [
     {

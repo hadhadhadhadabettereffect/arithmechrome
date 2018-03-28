@@ -3,13 +3,16 @@
 exports.__esModule = true;
 var defaults_1 = require("./defaults");
 var options = defaults_1.options;
-chrome.webNavigation.onHistoryStateUpdated.addListener(onAfterNavigate);
-chrome.webNavigation.onDOMContentLoaded.addListener(onAfterNavigate);
 chrome.storage.onChanged.addListener(onOptionsUpdate);
-function onAfterNavigate(details) {
-    // if options.active is true
-    // and details.url not in ignore list
-    chrome.tabs.sendMessage(details.tabId, options.colors);
+chrome.tabs.onUpdated.addListener(onTabsUpdate);
+chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
+    options = storedOptions;
+    msgTab();
+});
+function onTabsUpdate(tabId, changeInfo, tab) {
+    if (changeInfo.status == "complete") {
+        chrome.tabs.sendMessage(tabId, options.colors);
+    }
 }
 function onOptionsUpdate(changes, areaName) {
     if (areaName == "sync") {
@@ -29,11 +32,14 @@ function onOptionsUpdate(changes, areaName) {
             options.colors = changes.colors.newValue;
             // if options.active
             // send msg to current tab, the each tab not on the ignore list
-            chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, options.colors);
-            });
+            msgTab();
         }
     }
+}
+function msgTab() {
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, options.colors);
+    });
 }
 
 },{"./defaults":2}],2:[function(require,module,exports){
@@ -41,7 +47,7 @@ function onOptionsUpdate(changes, areaName) {
 exports.__esModule = true;
 exports.options = {
     colors: [
-        "#cecece",
+        "#888888",
         "#000000",
         "#67a4ff",
         "#fb1515",

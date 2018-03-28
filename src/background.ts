@@ -2,14 +2,17 @@ import { options as defaultOptions } from "./defaults";
 
 var options = defaultOptions;
 
-chrome.webNavigation.onHistoryStateUpdated.addListener(onAfterNavigate);
-chrome.webNavigation.onDOMContentLoaded.addListener(onAfterNavigate);
 chrome.storage.onChanged.addListener(onOptionsUpdate);
+chrome.tabs.onUpdated.addListener(onTabsUpdate);
+chrome.storage.sync.get(defaultOptions, function (storedOptions) {
+    options = storedOptions;
+    msgTab();
+});
 
-function onAfterNavigate (details) {
-    // if options.active is true
-    // and details.url not in ignore list
-    chrome.tabs.sendMessage(details.tabId, options.colors);
+function onTabsUpdate (tabId, changeInfo, tab) {
+    if (changeInfo.status == "complete") {
+        chrome.tabs.sendMessage(tabId, options.colors);
+    }
 }
 
 function onOptionsUpdate (changes, areaName) {
@@ -30,10 +33,14 @@ function onOptionsUpdate (changes, areaName) {
             options.colors = changes.colors.newValue;
             // if options.active
             // send msg to current tab, the each tab not on the ignore list
-            chrome.tabs.query({currentWindow: true, active: true},
-                function (tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, options.colors);
-            });
+            msgTab();
         }
     }
+}
+
+function msgTab () {
+    chrome.tabs.query({currentWindow: true, active: true},
+        function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, options.colors);
+    });
 }

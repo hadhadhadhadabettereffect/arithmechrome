@@ -3,7 +3,7 @@
 exports.__esModule = true;
 exports.options = {
     colors: [
-        "#cecece",
+        "#888888",
         "#000000",
         "#67a4ff",
         "#fb1515",

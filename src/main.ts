@@ -2,7 +2,7 @@ var iterator, styleNode;
 var colors, nodes = [];
 
 chrome.runtime.onMessage.addListener(
-    function(msg, sender, sendResponse) {
+    function (msg, sender, sendResponse) {
         colors = msg;
         requestAnimationFrame(writeCSS);
         if (!iterator) startIterator();
