@@ -90,7 +90,6 @@ exports.options = {
         "#6b0000" // maroon
     ],
     active: true,
-    onlybody: false,
     useBackground: false,
     backgroundColor: "#eeeeee"
 };
@@ -102,7 +101,6 @@ exports.options = {
 Object.defineProperty(exports, "__esModule", { value: true });
 const defaults_1 = require("./defaults");
 require("./components/Toggle");
-const el_checkbox_onlybody = document.getElementById("onlybody");
 const el_span_status = document.getElementById("status");
 const arr_el_input_colors = [
     document.getElementById("n0"),
@@ -132,7 +130,7 @@ var el_active_toggle;
 // init with default values
 var options = defaults_1.options;
 var popupMsg = "";
-var changes = 8191 /* all */;
+var changes = 4095 /* all */;
 var unsavedChanges = 0;
 var busy = false;
 // set listeners
@@ -184,11 +182,10 @@ function onUpdateColor(event) {
 function saveOptions() {
     // set bool values from checkboxes
     options.active = el_active_toggle.checked;
-    options.onlybody = el_checkbox_onlybody.checked;
     chrome.storage.sync.set(options, function () {
         popupMsg = "Options saved.";
         unsavedChanges = 0;
-        changes |= 4096 /* message */;
+        changes |= 2048 /* message */;
         signalUpdate();
     });
 }
@@ -210,7 +207,7 @@ function signalUpdate() {
  */
 function applyDomUpdates() {
     // check for changes and apply updates
-    for (let i = 13 /* count */; i >= 0; --i) {
+    for (let i = 12 /* count */; i >= 0; --i) {
         if (changes & (1 << i)) {
             changes ^= (1 << i);
             updateDomNode(i);
@@ -226,28 +223,21 @@ function applyDomUpdates() {
  * @param {number} i OptionEl index of el to update
  */
 function updateDomNode(i) {
-    switch (i) {
-        case 12 /* _message */:
-            // set msg text
-            el_span_status.textContent = popupMsg;
-            // if popupMsg, set timeout to clear msg after 1200ms
-            if (popupMsg.length) {
-                popupMsg = "";
-                changes |= 4096 /* message */;
-                setTimeout(signalUpdate, 1200);
-            }
-            break;
-        case 10 /* _active */:
-        case 11 /* _onlybody */:
-            break;
-        // colors
-        default:
-            let hex = options.colors[i];
-            // update input with normalized hex string
-            arr_el_input_colors[i].value = hex;
-            // set preview div color
-            arr_el_div_colorsquares[i].style.background = hex;
-            break;
+    if (i === 11 /* _message */) {
+        el_span_status.textContent = popupMsg;
+        // if popupMsg, set timeout to clear msg after 1200ms
+        if (popupMsg.length) {
+            popupMsg = "";
+            changes |= 2048 /* message */;
+            setTimeout(signalUpdate, 1200);
+        }
+    }
+    else if (i < 10) {
+        let hex = options.colors[i];
+        // update input with normalized hex string
+        arr_el_input_colors[i].value = hex;
+        // set preview div color
+        arr_el_div_colorsquares[i].style.background = hex;
     }
 }
 /*********************************

@@ -3,8 +3,7 @@ declare var chrome;
 declare const enum OptionEl {
     _c0, _c1, _c2, _c3, _c4, _c5,
     _c6, _c7, _c8, _c9,
-    _active, _onlybody,
-    _message, count,
+    _active, _message, count,
 
     c0 = 1 << _c0,
     c1 = 1 << _c1,
@@ -17,7 +16,6 @@ declare const enum OptionEl {
     c8 = 1 << _c8,
     c9 = 1 << _c9,
     active = 1 << _active,
-    onlybody = 1 << _onlybody,
     message = 1 << _message,
     all = (1 << count) -1
 }

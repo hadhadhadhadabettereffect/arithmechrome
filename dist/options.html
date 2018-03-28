@@ -4,6 +4,7 @@
     <title>Optarithm Options</title>
     <style>
         .row {
+            position: relative;
             width: 100%;
             display: block;
             padding: 4px 8px;
@@ -18,6 +19,10 @@
         }
         #status {
             min-height: 20px;
+        }
+        #activeToggle {
+            position: absolute;
+            right: 30px;
         }
     </style>
 </head>
@@ -78,15 +83,6 @@
         <div class="preview" id="p9"></div>
         <input type="text" id="n9">
     </div>
-</div>
-
-<hr/>
-
-<div class="row">
-    <label>
-        <input type="checkbox" id="onlybody">
-        Only colorize body copy. Ignore titles, links, etc.
-    </label>
 </div>
 
 <hr/>

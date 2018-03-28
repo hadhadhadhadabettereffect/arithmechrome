@@ -85,7 +85,6 @@ exports.options = {
         "#6b0000" // maroon
     ],
     active: true,
-    onlybody: false,
     useBackground: false,
     backgroundColor: "#eeeeee"
 };
