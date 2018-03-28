@@ -36,13 +36,6 @@ function onOptionsUpdate(changes, areaName) {
             options.active = changes.active.newValue;
             updateIcon();
             msgTab();
-            if (options.active) {
-                // send parse msg to active tab if not on ignore list
-                // the send parse msg to open tabs not on ignore list
-            }
-            else {
-                // send parse msg if current tab not on ignore list
-            }
         }
         if (changes.hasOwnProperty("ignore")) {
         }
@@ -55,11 +48,20 @@ function onOptionsUpdate(changes, areaName) {
     }
 }
 function msgTab() {
+    var msg = {
+        active: options.active,
+        colors: options.colors
+    };
+    // send msg to active tab first
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-            active: options.active,
-            colors: options.colors
-        });
+        chrome.tabs.sendMessage(tabs[0].id, msg);
+    });
+    // send msg to all tabs
+    chrome.tabs.query({}, function (tabs) {
+        for (var _i = 0, tabs_1 = tabs; _i < tabs_1.length; _i++) {
+            var tab = tabs_1[_i];
+            chrome.tabs.sendMessage(tab.id, msg);
+        }
     });
 }
 function updateIcon() {

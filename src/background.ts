@@ -49,12 +49,20 @@ function onOptionsUpdate (changes, areaName) {
 }
 
 function msgTab () {
+    var msg = {
+        active: options.active,
+        colors: options.colors
+    };
+    // send msg to active tab first
     chrome.tabs.query({currentWindow: true, active: true},
         function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {
-                active: options.active,
-                colors: options.colors
-            });
+            chrome.tabs.sendMessage(tabs[0].id, msg);
+    });
+    // send msg to all tabs
+    chrome.tabs.query({}, function (tabs) {
+        for (let tab of tabs) {
+            chrome.tabs.sendMessage(tab.id, msg);
+        }
     });
 }
 
