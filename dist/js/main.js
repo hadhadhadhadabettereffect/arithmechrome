@@ -4,10 +4,15 @@
 var iterator, styleNode;
 var colors, nodes = [];
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-    colors = msg;
-    requestAnimationFrame(writeCSS);
-    if (!iterator)
-        startIterator();
+    colors = msg.colors;
+    if (msg.active) {
+        requestAnimationFrame(writeCSS);
+        if (!iterator)
+            startIterator();
+    }
+    else {
+        requestAnimationFrame(removeCSS);
+    }
 });
 /**
  * traverse dom via node iterator, wrap digits with styled spans
@@ -80,6 +85,15 @@ function writeCSS() {
         styleText += ".digit--" + i + "{color:" + colors[i] + ";}";
     }
     styleNode.innerHTML = styleText;
+}
+/**
+ *
+ */
+function removeCSS() {
+    if (styleNode) {
+        document.head.removeChild(styleNode);
+        styleNode = null;
+    }
 }
 
 },{}]},{},[1,2]);

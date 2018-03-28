@@ -22,7 +22,10 @@ chrome.storage.sync.get(defaultOptions, function (storedOptions) {
 
 function onTabsUpdate (tabId, changeInfo, tab) {
     if (changeInfo.status == "complete") {
-        chrome.tabs.sendMessage(tabId, options.colors);
+        chrome.tabs.sendMessage(tabId, {
+            active: options.active,
+            colors: options.colors
+        });
     }
 }
 
@@ -31,12 +34,7 @@ function onOptionsUpdate (changes, areaName) {
         if (changes.hasOwnProperty("active")) {
             options.active = changes.active.newValue;
             updateIcon();
-            if (options.active) {
-                // send parse msg to active tab if not on ignore list
-                // the send parse msg to open tabs not on ignore list
-            } else {
-                // send parse msg if current tab not on ignore list
-            }
+            msgTab();
         }
         if (changes.hasOwnProperty("ignore")) {
 
@@ -53,7 +51,10 @@ function onOptionsUpdate (changes, areaName) {
 function msgTab () {
     chrome.tabs.query({currentWindow: true, active: true},
         function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, options.colors);
+            chrome.tabs.sendMessage(tabs[0].id, {
+                active: options.active,
+                colors: options.colors
+            });
     });
 }
 
