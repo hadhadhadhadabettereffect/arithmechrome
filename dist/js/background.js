@@ -40,19 +40,11 @@ function onTabsUpdate(tabId, changeInfo, tab) {
 }
 function onOptionsUpdate(changes, areaName) {
     if (areaName == "sync") {
-        if (changes.hasOwnProperty("active")) {
-            options.active = changes.active.newValue;
+        for (let k in changes)
+            options[k] = changes[k].newValue;
+        if (changes.hasOwnProperty("active"))
             updateIcon();
-            msgTab();
-        }
-        if (changes.hasOwnProperty("ignore")) {
-        }
-        if (changes.hasOwnProperty("colors")) {
-            options.colors = changes.colors.newValue;
-            // if options.active
-            // send msg to current tab, the each tab not on the ignore list
-            msgTab();
-        }
+        msgTab();
     }
 }
 function msgTab() {
@@ -90,7 +82,8 @@ exports.options = {
         "#5a0eaf",
         "#f5970c",
         "#000080",
-        "#6b0000" // 9 maroon
+        "#6b0000",
+        "none" // background
     ],
     active: true,
     usebg: false,

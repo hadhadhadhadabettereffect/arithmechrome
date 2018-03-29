@@ -43,18 +43,18 @@ el_digit_wrap.addEventListener("click", handleClickUndo);
 document.getElementById("bgwrap").addEventListener("change", function (event) {
     options.usebg = el_check_usebg.checked;
     options.background = 255 - parseInt(el_range_bg.value);
+    options.colors[10] = options.usebg ?
+        "rgb(" + options.background + "," +
+                options.background + "," +
+                options.background + ")" :
+        "none";
     chrome.storage.sync.set(options);
     requestAnimationFrame(updateBgColor);
 });
 
 function updateBgColor () {
-    el_digit_wrap.style.background = options.usebg ?
-        "rgb(" + options.background + "," +
-                options.background + "," +
-                options.background + ")" :
-        "none";
+    el_digit_wrap.style.background = options.colors[10];
 }
-
 
 /**
  * when undo button is clicked, set color to cached value

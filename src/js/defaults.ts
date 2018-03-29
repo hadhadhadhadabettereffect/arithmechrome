@@ -9,7 +9,8 @@ export const options = {
         "#5a0eaf", // 6 purple
         "#f5970c", // 7 orange
         "#000080", // 8 navy
-        "#6b0000"  // 9 maroon
+        "#6b0000", // 9 maroon
+        "none" // background
     ],
     active: true,
     usebg: false,

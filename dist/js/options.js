@@ -87,7 +87,8 @@ exports.options = {
         "#5a0eaf",
         "#f5970c",
         "#000080",
-        "#6b0000" // 9 maroon
+        "#6b0000",
+        "none" // background
     ],
     active: true,
     usebg: false,
@@ -139,15 +140,16 @@ el_digit_wrap.addEventListener("click", handleClickUndo);
 document.getElementById("bgwrap").addEventListener("change", function (event) {
     options.usebg = el_check_usebg.checked;
     options.background = 255 - parseInt(el_range_bg.value);
-    chrome.storage.sync.set(options);
-    requestAnimationFrame(updateBgColor);
-});
-function updateBgColor() {
-    el_digit_wrap.style.background = options.usebg ?
+    options.colors[10] = options.usebg ?
         "rgb(" + options.background + "," +
             options.background + "," +
             options.background + ")" :
         "none";
+    chrome.storage.sync.set(options);
+    requestAnimationFrame(updateBgColor);
+});
+function updateBgColor() {
+    el_digit_wrap.style.background = options.colors[10];
 }
 /**
  * when undo button is clicked, set color to cached value

@@ -39,21 +39,10 @@ function onTabsUpdate (tabId, changeInfo, tab) {
 }
 
 function onOptionsUpdate (changes, areaName) {
-    if (areaName == "sync"){
-        if (changes.hasOwnProperty("active")) {
-            options.active = changes.active.newValue;
-            updateIcon();
-            msgTab();
-        }
-        if (changes.hasOwnProperty("ignore")) {
-
-        }
-        if (changes.hasOwnProperty("colors")) {
-            options.colors = changes.colors.newValue;
-            // if options.active
-            // send msg to current tab, the each tab not on the ignore list
-            msgTab();
-        }
+    if (areaName == "sync") {
+        for (let k in changes) options[k] = changes[k].newValue;
+        if (changes.hasOwnProperty("active")) updateIcon();
+        msgTab();
     }
 }
 
