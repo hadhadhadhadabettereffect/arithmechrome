@@ -3,6 +3,11 @@
 },{}],2:[function(require,module,exports){
 var iterator, styleNode;
 var colors, nodes = [];
+class ColorDigit extends HTMLSpanElement {
+}
+document.addEventListener("DOMContentLoaded", function (event) {
+    window.customElements.define("colordigit", ColorDigit);
+});
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     colors = msg.colors;
     if (msg.active) {
@@ -50,7 +55,7 @@ function swapHTML() {
         if (!nodes.length)
             break;
         el = nodes.pop();
-        el.innerHTML = el.textContent.replace(/\d/g, "<span class='digit--$&'>$&</span>");
+        el.innerHTML = el.textContent.replace(/\d/g, "<colordigit class='n$&'>$&</colordigit>");
     } while (end - start < 3);
     if (nodes.length)
         requestAnimationFrame(swapHTML);
@@ -82,7 +87,7 @@ function writeCSS() {
     }
     var styleText = "";
     for (let i = 0; i < 10; ++i) {
-        styleText += ".digit--" + i + "{color:" + colors[i] + ";}";
+        styleText += "colordigit.n" + i + "{color:" + colors[i] + ";}";
     }
     styleNode.innerHTML = styleText;
 }
