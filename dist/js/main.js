@@ -65,11 +65,13 @@ function swapHTML() {
  */
 function startIterator() {
     iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_ELEMENT, function (node) {
-        return (node.firstChild &&
+        return (node.firstElementChild &&
             // first child is a text node
-            node.firstChild.nodeType === 3 /* Node.TEXT_NODE */ &&
-            // is not a script tag
+            node.firstElementChild.nodeType === 3 /* Node.TEXT_NODE */ &&
+            // is not a script/style tag
             node.nodeName != "SCRIPT" &&
+            node.nodeName != "NOSCRIPT" &&
+            node.nodeName != "STYLE" &&
             // text contains a digit
             /\d/.test(node.firstChild.textContent)) ?
             1 /* NodeFilter.FILTER_ACCEPT */ :

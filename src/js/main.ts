@@ -70,8 +70,10 @@ function startIterator () {
                 node.firstChild &&
                 // first child is a text node
                 node.firstChild.nodeType === 3 /* Node.TEXT_NODE */ &&
-                // is not a script tag
+                // is not a script/style tag
                 node.nodeName != "SCRIPT" &&
+                node.nodeName != "NOSCRIPT" &&
+                node.nodeName != "STYLE" && 
                 // text contains a digit
                 /\d/.test(node.firstChild.textContent)) ?
                     1 /* NodeFilter.FILTER_ACCEPT */ :
