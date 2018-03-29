@@ -15,6 +15,7 @@ const inactiveIcons = {
 var options = defaults_1.options;
 chrome.storage.onChanged.addListener(onOptionsUpdate);
 chrome.tabs.onUpdated.addListener(onTabsUpdate);
+chrome.tabs.onActivated.addListener(onTabChange);
 chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
     options = storedOptions;
     if (options.active)
@@ -22,6 +23,13 @@ chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
     else
         updateIcon();
 });
+function onTabChange(activeInfo) {
+    // check if url is in list
+    chrome.tabs.sendMessage(activeInfo.tabId, {
+        active: options.active,
+        colors: options.colors
+    });
+}
 function onTabsUpdate(tabId, changeInfo, tab) {
     if (changeInfo.status == "complete") {
         chrome.tabs.sendMessage(tabId, {
@@ -56,12 +64,12 @@ function msgTab() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, msg);
     });
-    // send msg to all tabs
-    chrome.tabs.query({}, function (tabs) {
-        for (let tab of tabs) {
-            chrome.tabs.sendMessage(tab.id, msg);
-        }
-    });
+    // // send msg to all tabs
+    // chrome.tabs.query({}, function (tabs) {
+    //     for (let tab of tabs) {
+    //         chrome.tabs.sendMessage(tab.id, msg);
+    //     }
+    // });
 }
 function updateIcon() {
     chrome.browserAction.setIcon({ path: options.active ?
@@ -82,11 +90,11 @@ exports.options = {
         "#5a0eaf",
         "#f5970c",
         "#000080",
-        "#6b0000" // maroon
+        "#6b0000" // 9 maroon
     ],
     active: true,
-    useBackground: false,
-    backgroundColor: "#eeeeee"
+    usebg: false,
+    background: 0
 };
 
 },{}],3:[function(require,module,exports){

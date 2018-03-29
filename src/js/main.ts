@@ -91,14 +91,14 @@ function writeCSS () {
         styleNode = document.createElement("style");
         document.head.appendChild(styleNode);
     }
-    var styleText = "";
+    var styleText = "colordigit{background:"+ colors[10] +"}";
     for (let i=0; i<10; ++i) {
-        styleText += "colordigit.n" + i + "{color:" + colors[i] + ";}";
+        styleText += "colordigit.n" + i + "{color:" + colors[i] + "}";
     }
     styleNode.innerHTML = styleText;
 }
 
-/**
+/*
  * 
  */
 function removeCSS () {

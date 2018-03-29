@@ -65,9 +65,9 @@ function swapHTML() {
  */
 function startIterator() {
     iterator = document.createNodeIterator(document.body, NodeFilter.SHOW_ELEMENT, function (node) {
-        return (node.firstElementChild &&
+        return (node.firstChild &&
             // first child is a text node
-            node.firstElementChild.nodeType === 3 /* Node.TEXT_NODE */ &&
+            node.firstChild.nodeType === 3 /* Node.TEXT_NODE */ &&
             // is not a script/style tag
             node.nodeName != "SCRIPT" &&
             node.nodeName != "NOSCRIPT" &&
@@ -87,13 +87,13 @@ function writeCSS() {
         styleNode = document.createElement("style");
         document.head.appendChild(styleNode);
     }
-    var styleText = "";
+    var styleText = "colordigit{background:" + colors[10] + "}";
     for (let i = 0; i < 10; ++i) {
-        styleText += "colordigit.n" + i + "{color:" + colors[i] + ";}";
+        styleText += "colordigit.n" + i + "{color:" + colors[i] + "}";
     }
     styleNode.innerHTML = styleText;
 }
-/**
+/*
  *
  */
 function removeCSS() {

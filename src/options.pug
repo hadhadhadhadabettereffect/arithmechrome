@@ -17,4 +17,8 @@ html
         #digits
             while n < 10
                 +colorselect(n++)
+        #bgwrap
+            input(id="bg" type="range" min=0 max=255)
+            input(id="usebg" type="checkbox")
+            label background
         script(src="js/options.js")

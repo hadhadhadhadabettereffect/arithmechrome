@@ -87,11 +87,11 @@ exports.options = {
         "#5a0eaf",
         "#f5970c",
         "#000080",
-        "#6b0000" // maroon
+        "#6b0000" // 9 maroon
     ],
     active: true,
-    useBackground: false,
-    backgroundColor: "#eeeeee"
+    usebg: false,
+    background: 0
 };
 
 },{}],3:[function(require,module,exports){
@@ -104,6 +104,9 @@ require("./components/Toggle");
 const arr_el_input_colors = document.querySelectorAll(".color-input");
 const arr_el_undo = document.querySelectorAll(".undo");
 const arr_el_labels = document.querySelectorAll(".number-label");
+const el_digit_wrap = document.getElementById("digits");
+const el_range_bg = document.getElementById("bg");
+const el_check_usebg = document.getElementById("usebg");
 var el_active_toggle;
 // init with default values
 var options = defaults_1.options;
@@ -121,15 +124,31 @@ document.addEventListener('DOMContentLoaded', function () {
         options = storedOptions;
         cachedColors = options.colors.slice();
         el_active_toggle.checked = options.active;
+        el_check_usebg.checked = options.usebg;
+        el_range_bg.value = '' + (255 - options.background);
         for (let i = 0; i < 10; ++i) {
             arr_el_input_colors[i].value = cachedColors[i];
             arr_el_labels[i].style.color = cachedColors[i];
             arr_el_undo[i].style.color = cachedColors[i];
         }
+        requestAnimationFrame(updateBgColor);
     });
 });
-document.getElementById("digits").addEventListener("change", handleColorInput);
-document.getElementById("digits").addEventListener("click", handleClickUndo);
+el_digit_wrap.addEventListener("change", handleColorInput);
+el_digit_wrap.addEventListener("click", handleClickUndo);
+document.getElementById("bgwrap").addEventListener("change", function (event) {
+    options.usebg = el_check_usebg.checked;
+    options.background = 255 - parseInt(el_range_bg.value);
+    chrome.storage.sync.set(options);
+    requestAnimationFrame(updateBgColor);
+});
+function updateBgColor() {
+    el_digit_wrap.style.background = options.usebg ?
+        "rgb(" + options.background + "," +
+            options.background + "," +
+            options.background + ")" :
+        "none";
+}
 /**
  * when undo button is clicked, set color to cached value
  */

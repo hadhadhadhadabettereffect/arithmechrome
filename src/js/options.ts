@@ -4,6 +4,9 @@ import "./components/Toggle";
 const arr_el_input_colors = document.querySelectorAll(".color-input");
 const arr_el_undo = document.querySelectorAll(".undo");
 const arr_el_labels = document.querySelectorAll(".number-label");
+const el_digit_wrap = document.getElementById("digits");
+const el_range_bg:HTMLInputElement = <HTMLInputElement> document.getElementById("bg");
+const el_check_usebg:HTMLInputElement = <HTMLInputElement> document.getElementById("usebg");
 var el_active_toggle;
 
 // init with default values
@@ -23,15 +26,35 @@ document.addEventListener('DOMContentLoaded', function () {
         options = storedOptions;
         cachedColors = options.colors.slice();
         el_active_toggle.checked = options.active;
+        el_check_usebg.checked = options.usebg;
+        el_range_bg.value = ''+ (255 - options.background);
         for (let i=0; i<10; ++i) {
             (<HTMLInputElement>arr_el_input_colors[i]).value = cachedColors[i];
             (<HTMLElement>arr_el_labels[i]).style.color = cachedColors[i];
             (<HTMLElement>arr_el_undo[i]).style.color = cachedColors[i];
         }
+        requestAnimationFrame(updateBgColor);
     });
 });
-document.getElementById("digits").addEventListener("change", handleColorInput);
-document.getElementById("digits").addEventListener("click", handleClickUndo);
+
+el_digit_wrap.addEventListener("change", handleColorInput);
+el_digit_wrap.addEventListener("click", handleClickUndo);
+
+document.getElementById("bgwrap").addEventListener("change", function (event) {
+    options.usebg = el_check_usebg.checked;
+    options.background = 255 - parseInt(el_range_bg.value);
+    chrome.storage.sync.set(options);
+    requestAnimationFrame(updateBgColor);
+});
+
+function updateBgColor () {
+    el_digit_wrap.style.background = options.usebg ?
+        "rgb(" + options.background + "," +
+                options.background + "," +
+                options.background + ")" :
+        "none";
+}
+
 
 /**
  * when undo button is clicked, set color to cached value
