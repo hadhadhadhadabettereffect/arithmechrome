@@ -10,9 +10,9 @@ const outDir = path.join(__dirname, "./dist");
 const srcDir = path.join(__dirname, "./src");
 const defFile = path.join(srcDir, "js", "defs.d.ts");
 
-const compiledFunction = pug.compileFile(path.join(__dirname, "src/options.pug"));
+const compiledFunction = pug.compileFile(path.join(srcDir, "options.pug"));
 var htmlString = compiledFunction({title: package.name});
-var cssString = uglifycss.processFiles(["src/styles/options.css"]);
+var cssString = uglifycss.processFiles([path.join(srcDir, "styles", "options.css")]);
 
 fs.writeFileSync(path.join(outDir, "options.css"), cssString);
 fs.writeFileSync(path.join(outDir, "options.html"), htmlString);

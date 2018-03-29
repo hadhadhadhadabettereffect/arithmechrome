@@ -23,6 +23,10 @@ chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
     else
         updateIcon();
 });
+chrome.browserAction.onClicked.addListener(function (tab) {
+    options.active = !options.active;
+    chrome.storage.sync.set(options);
+});
 function onTabChange(activeInfo) {
     // check if url is in list
     chrome.tabs.sendMessage(activeInfo.tabId, {
@@ -48,20 +52,13 @@ function onOptionsUpdate(changes, areaName) {
     }
 }
 function msgTab() {
-    var msg = {
-        active: options.active,
-        colors: options.colors
-    };
-    // send msg to active tab first
+    // send msg to active tab
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, msg);
+        chrome.tabs.sendMessage(tabs[0].id, {
+            active: options.active,
+            colors: options.colors
+        });
     });
-    // // send msg to all tabs
-    // chrome.tabs.query({}, function (tabs) {
-    //     for (let tab of tabs) {
-    //         chrome.tabs.sendMessage(tab.id, msg);
-    //     }
-    // });
 }
 function updateIcon() {
     chrome.browserAction.setIcon({ path: options.active ?

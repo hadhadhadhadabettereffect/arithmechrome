@@ -21,6 +21,7 @@ customElements.whenDefined("active-toggle").then(() => {
         chrome.storage.sync.set(options);
     });
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.sync.get(defaultOptions, function (storedOptions) {
         options = storedOptions;

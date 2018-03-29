@@ -28,8 +28,7 @@
         "16": "icons/active/icon16.png",
         "24": "icons/active/icon24.png",
         "32": "icons/active/icon32.png"
-      },
-      "default_popup": "options.html"
+      }
   },
   "options_ui": {
     "page": "options.html",

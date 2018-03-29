@@ -20,6 +20,11 @@ chrome.storage.sync.get(defaultOptions, function (storedOptions) {
     if (options.active) msgTab();
     else updateIcon();
 });
+chrome.browserAction.onClicked.addListener(function (tab) {
+    options.active = !options.active;
+    chrome.storage.sync.set(options);
+});
+
 
 function onTabChange (activeInfo) {
     // check if url is in list
@@ -47,21 +52,15 @@ function onOptionsUpdate (changes, areaName) {
 }
 
 function msgTab () {
-    var msg = {
-        active: options.active,
-        colors: options.colors
-    };
-    // send msg to active tab first
+    // send msg to active tab
     chrome.tabs.query({currentWindow: true, active: true},
         function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, msg);
-    });
-    // // send msg to all tabs
-    // chrome.tabs.query({}, function (tabs) {
-    //     for (let tab of tabs) {
-    //         chrome.tabs.sendMessage(tab.id, msg);
-    //     }
-    // });
+            chrome.tabs.sendMessage(tabs[0].id, {
+                active: options.active,
+                colors: options.colors
+            });
+        }
+    );
 }
 
 function updateIcon () {
