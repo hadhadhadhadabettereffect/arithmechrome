@@ -1,17 +1,42 @@
+#digits {
+    max-width: 100%;
+    display: flex;
+}
+
+.color-wrap {
+    padding: 4px;
+    text-align: center;
+}
+
+.number-label {
+    display: block;
+    float: left;
+    width: 20px;
+    height: 16px;
+}
+
 input[type="color"].color-input {
-    display: inline-block;
+    display: block;
     width: 20px;
     padding: 0;
     border: none;
     outline: none;
     background: none;
     cursor: pointer;
+    float: left;
+    transition: transform linear 180ms;
 }
+
+input[type="color"].color-input:hover {
+    transform: scale3d(1.1,1.1,1);
+}
+
 input[type="color" i]::-webkit-color-swatch {
     border-radius: 50%;
     padding: 0;
     margin: 0;
 }
+
 .row {
     position: relative;
     width: 100%;
@@ -19,20 +44,12 @@ input[type="color" i]::-webkit-color-swatch {
     padding: 4px 8px;
     min-height: 30px;
 }
-.preview {
-    height: 14px;
-    width: 14px;
-    border-radius: 2px;
-    border: 1px solid lightgray;
-    display: inline-block;
-}
-#status {
-    min-height: 20px;
-}
+
 #activeToggle {
     position: absolute;
     right: 30px;
 }
+
 .undo {
     visibility: hidden;
     height: 20px;
@@ -41,7 +58,9 @@ input[type="color" i]::-webkit-color-swatch {
     color: #39c;
     display: block;
     cursor: pointer;
+    float: left;
 }
+
 .undo.active {
     visibility: visible;
 }

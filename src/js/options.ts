@@ -3,6 +3,7 @@ import "./components/Toggle";
 
 const arr_el_input_colors = document.querySelectorAll(".color-input");
 const arr_el_undo = document.querySelectorAll(".undo");
+const arr_el_labels = document.querySelectorAll(".number-label");
 var el_active_toggle;
 
 // init with default values
@@ -24,8 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
         el_active_toggle.checked = options.active;
         for (let i=0; i<10; ++i) {
             (<HTMLInputElement>arr_el_input_colors[i]).value = cachedColors[i];
+            (<HTMLElement>arr_el_labels[i]).style.color = cachedColors[i];
+            (<HTMLElement>arr_el_undo[i]).style.color = cachedColors[i];
         }
-        // adding change listener after initial values set
     });
 });
 document.getElementById("digits").addEventListener("change", handleColorInput);
@@ -55,6 +57,7 @@ function handleColorInput (event) {
 function updateColor (n, color) {
     options.colors[n] = color;
     chrome.storage.sync.set(options);
+    (<HTMLElement>arr_el_labels[n]).style.color = color;
     arr_el_undo[n].className = cachedColors[n] == color ?
         "undo" : "undo active";
 }
