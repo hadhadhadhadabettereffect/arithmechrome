@@ -2,7 +2,6 @@
   "name": "arithmechrome",
   "version": "1.0.0",
   "description": "chrome extension to colorize numbers in text",
-  "main": "build/main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hadhadhadhadabettereffect/optarithm.git"

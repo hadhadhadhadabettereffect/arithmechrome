@@ -1,2 +1,4 @@
-dist/icons
 node_modules
+*.zip
+dist
+!dist/manifest.json

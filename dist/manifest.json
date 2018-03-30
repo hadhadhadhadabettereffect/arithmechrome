@@ -1,7 +1,7 @@
 {
-  "name": "optarithm",
+  "name": "arithmechrome",
   "description": "colorize numbers",
-  "version": "0.1",
+  "version": "1.0",
   "icons": {
     "16": "icons/active/icon16.png",
     "32":"icons/active/icon32.png",
@@ -23,7 +23,7 @@
     "persistent": false
   },
   "browser_action": {
-      "default_title": "optarithm",
+      "default_title": "arithmechrome",
       "default_icon": {
         "16": "icons/active/icon16.png",
         "24": "icons/active/icon24.png",
