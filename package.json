@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "chrome extension to colorize numbers in text",
   "main": "build/main.js",
-  "scripts": {
-    "build": "node build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hadhadhadhadabettereffect/optarithm.git"
@@ -18,10 +14,10 @@
   },
   "homepage": "https://github.com/hadhadhadhadabettereffect/optarithm#readme",
   "devDependencies": {
-    "browserify": "^16.1.1",
-    "pug": "^2.0.3",
-    "tsify": "^3.0.4",
-    "typescript": "^2.7.2",
-    "uglifycss": "0.0.29"
+    "gulp": "^3.9.1",
+    "gulp-csso": "^3.0.1",
+    "gulp-pug": "^3.3.0",
+    "gulp-typescript": "^4.0.2",
+    "typescript": "^2.7.2"
   }
 }

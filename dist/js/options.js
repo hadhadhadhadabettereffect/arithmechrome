@@ -1,7 +1,10 @@
-(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.options = {
+var arr_el_input_colors = document.querySelectorAll(".color-input");
+var arr_el_undo = document.querySelectorAll(".undo");
+var arr_el_labels = document.querySelectorAll(".number-label");
+var el_digit_wrap = document.getElementById("digits");
+var el_range_bg = document.getElementById("bg");
+var el_check_usebg = document.getElementById("usebg");
+var options = {
     colors: [
         "#888888",
         "#000000",
@@ -19,28 +22,14 @@ exports.options = {
     usebg: false,
     background: 0
 };
-
-},{}],2:[function(require,module,exports){
-
-},{}],3:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const defaults_1 = require("./defaults");
-const arr_el_input_colors = document.querySelectorAll(".color-input");
-const arr_el_undo = document.querySelectorAll(".undo");
-const arr_el_labels = document.querySelectorAll(".number-label");
-const el_digit_wrap = document.getElementById("digits");
-const el_range_bg = document.getElementById("bg");
-const el_check_usebg = document.getElementById("usebg");
-var options = defaults_1.options;
 var cachedColors = options.colors;
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.sync.get(defaults_1.options, function (storedOptions) {
+    chrome.storage.sync.get(options, function (storedOptions) {
         options = storedOptions;
         cachedColors = options.colors.slice();
         el_check_usebg.checked = options.usebg;
         el_range_bg.value = '' + (255 - options.background);
-        for (let i = 0; i < 10; ++i) {
+        for (var i = 0; i < 10; ++i) {
             arr_el_input_colors[i].value = cachedColors[i];
             arr_el_labels[i].style.color = cachedColors[i];
             arr_el_undo[i].style.background = cachedColors[i];
@@ -67,7 +56,7 @@ document.getElementById("bgwrap").addEventListener("change", function (event) {
  */
 function handleClickUndo(event) {
     if (event.target.className == "undo active") {
-        let d = event.target.id.substring(1);
+        var d = event.target.id.substring(1);
         arr_el_input_colors[d].value = cachedColors[d];
         updateColor(d, cachedColors[d]);
     }
@@ -94,9 +83,7 @@ function updateColor(n, color) {
  * @returns boolean true if color is dark
  */
 function isDarkColor(hexString) {
-    let n = parseInt(hexString.substring(1), 16);
-    let rgbSum = (n & 255) + ((n >>> 8) & 255) + ((n >>> 16) & 255);
+    var n = parseInt(hexString.substring(1), 16);
+    var rgbSum = (n & 255) + ((n >>> 8) & 255) + ((n >>> 16) & 255);
     return rgbSum < 500;
 }
-
-},{"./defaults":1}]},{},[2,3]);

@@ -1,3 +1,5 @@
+declare var chrome;
+
 var iterator, styleNode;
 var colors, nodes = [];
 

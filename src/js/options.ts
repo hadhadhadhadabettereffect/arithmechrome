@@ -1,4 +1,4 @@
-import { options as defaultOptions } from "./defaults";
+declare var chrome;
 
 const arr_el_input_colors = document.querySelectorAll(".color-input");
 const arr_el_undo = document.querySelectorAll(".undo");
@@ -6,12 +6,28 @@ const arr_el_labels = document.querySelectorAll(".number-label");
 const el_digit_wrap = document.getElementById("digits");
 const el_range_bg:HTMLInputElement = <HTMLInputElement> document.getElementById("bg");
 const el_check_usebg:HTMLInputElement = <HTMLInputElement> document.getElementById("usebg");
-
-var options = defaultOptions;
+var options = {
+    colors: [
+        "#888888", // 0 gray
+        "#000000", // 1 black
+        "#67a4ff", // 2 light blue
+        "#fb1515", // 3 red
+        "#0c52ef", // 4 blue
+        "#18713c", // 5 green
+        "#5a0eaf", // 6 purple
+        "#f5970c", // 7 orange
+        "#000080", // 8 navy
+        "#6b0000", // 9 maroon
+        "none" // background
+    ],
+    active: true,
+    usebg: false,
+    background: 0
+};
 var cachedColors = options.colors;
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.sync.get(defaultOptions, function (storedOptions) {
+    chrome.storage.sync.get(options, function (storedOptions) {
         options = storedOptions;
         cachedColors = options.colors.slice();
         el_check_usebg.checked = options.usebg;

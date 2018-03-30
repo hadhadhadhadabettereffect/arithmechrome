@@ -1,4 +1,4 @@
-import { options as defaultOptions } from "./defaults";
+declare var chrome;
 
 const activeIcons = {
     "16": "icons/active/icon16.png",
@@ -10,12 +10,29 @@ const inactiveIcons = {
     "24": "icons/inactive/icon24.png",
     "32": "icons/inactive/icon32.png"
 };
-var options = defaultOptions;
+var options = {
+    colors: [
+        "#888888", // 0 gray
+        "#000000", // 1 black
+        "#67a4ff", // 2 light blue
+        "#fb1515", // 3 red
+        "#0c52ef", // 4 blue
+        "#18713c", // 5 green
+        "#5a0eaf", // 6 purple
+        "#f5970c", // 7 orange
+        "#000080", // 8 navy
+        "#6b0000", // 9 maroon
+        "none" // background
+    ],
+    active: true,
+    usebg: false,
+    background: 0
+};
 
 chrome.storage.onChanged.addListener(onOptionsUpdate);
 chrome.tabs.onUpdated.addListener(onTabsUpdate);
 chrome.tabs.onActivated.addListener(onTabChange);
-chrome.storage.sync.get(defaultOptions, function (storedOptions) {
+chrome.storage.sync.get(options, function (storedOptions) {
     options = storedOptions;
     if (options.active) msgTab();
     else updateIcon();
