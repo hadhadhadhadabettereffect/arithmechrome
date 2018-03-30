@@ -93,9 +93,6 @@ function writeCSS() {
     }
     styleNode.innerHTML = styleText;
 }
-/*
- *
- */
 function removeCSS() {
     if (styleNode) {
         document.head.removeChild(styleNode);

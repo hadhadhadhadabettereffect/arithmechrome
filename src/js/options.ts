@@ -1,5 +1,4 @@
 import { options as defaultOptions } from "./defaults";
-import "./components/Toggle";
 
 const arr_el_input_colors = document.querySelectorAll(".color-input");
 const arr_el_undo = document.querySelectorAll(".undo");
@@ -7,34 +6,24 @@ const arr_el_labels = document.querySelectorAll(".number-label");
 const el_digit_wrap = document.getElementById("digits");
 const el_range_bg:HTMLInputElement = <HTMLInputElement> document.getElementById("bg");
 const el_check_usebg:HTMLInputElement = <HTMLInputElement> document.getElementById("usebg");
-var el_active_toggle;
 
-// init with default values
 var options = defaultOptions;
 var cachedColors = options.colors;
-
-customElements.whenDefined("active-toggle").then(() => {
-    el_active_toggle = document.createElement("active-toggle");
-    document.getElementById("activeToggle").appendChild(el_active_toggle);
-    el_active_toggle.addEventListener("toggle", function () {
-        options.active = el_active_toggle.checked;
-        chrome.storage.sync.set(options);
-    });
-});
 
 document.addEventListener('DOMContentLoaded', function () {
     chrome.storage.sync.get(defaultOptions, function (storedOptions) {
         options = storedOptions;
         cachedColors = options.colors.slice();
-        el_active_toggle.checked = options.active;
         el_check_usebg.checked = options.usebg;
         el_range_bg.value = ''+ (255 - options.background);
         for (let i=0; i<10; ++i) {
             (<HTMLInputElement>arr_el_input_colors[i]).value = cachedColors[i];
             (<HTMLElement>arr_el_labels[i]).style.color = cachedColors[i];
-            (<HTMLElement>arr_el_undo[i]).style.color = cachedColors[i];
+            (<HTMLElement>arr_el_undo[i]).style.background = cachedColors[i];
+            (<HTMLElement>arr_el_undo[i]).style.color = isDarkColor(cachedColors[i]) ?
+                "#fff" : "#000";
         }
-        requestAnimationFrame(updateBgColor);
+        document.body.style.background = cachedColors[10];
     });
 });
 
@@ -44,18 +33,13 @@ el_digit_wrap.addEventListener("click", handleClickUndo);
 document.getElementById("bgwrap").addEventListener("change", function (event) {
     options.usebg = el_check_usebg.checked;
     options.background = 255 - parseInt(el_range_bg.value);
-    options.colors[10] = options.usebg ?
-        "rgb(" + options.background + "," +
+    options.colors[10] = options.usebg ? "rgb(" +
                 options.background + "," +
-                options.background + ")" :
-        "none";
+                options.background + "," +
+                options.background + ")" : "none";
     chrome.storage.sync.set(options);
-    requestAnimationFrame(updateBgColor);
+    document.body.style.background = options.colors[10];
 });
-
-function updateBgColor () {
-    el_digit_wrap.style.background = options.colors[10];
-}
 
 /**
  * when undo button is clicked, set color to cached value
@@ -84,4 +68,15 @@ function updateColor (n, color) {
     (<HTMLElement>arr_el_labels[n]).style.color = color;
     arr_el_undo[n].className = cachedColors[n] == color ?
         "undo" : "undo active";
+}
+
+/**
+ * check where a color is generally dark vs light
+ * @param hexString 6-char hex color string with leading '#'
+ * @returns boolean true if color is dark
+ */
+function isDarkColor(hexString)  {
+    let n = parseInt(hexString.substring(1), 16);
+    let rgbSum = (n&255) + ((n>>>8)&255) + ((n>>>16)&255);
+    return rgbSum < 500;
 }

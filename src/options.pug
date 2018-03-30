@@ -12,13 +12,11 @@ html
         title #{title}
         link(rel="stylesheet" href="options.css")
     body
-        .row
-            #activeToggle
         #digits
             while n < 10
                 +colorselect(n++)
         #bgwrap
-            input(id="bg" type="range" min=0 max=255)
+            span background
             input(id="usebg" type="checkbox")
-            label background
+            input(id="bg" type="range" min=0 max=255)
         script(src="js/options.js")
