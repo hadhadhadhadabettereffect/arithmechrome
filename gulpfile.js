@@ -1,12 +1,17 @@
 const gulp = require("gulp");
 const ts = require("gulp-typescript");
 const pug = require("gulp-pug");
-const csso = require('gulp-csso');
+const csso = require("gulp-csso");
+const uglify = require("gulp-uglify");
+const pump = require("pump");
 
-gulp.task("js", function () {
-    var tsResult = gulp.src("src/js/*.ts")
-        .pipe(ts());
-    return tsResult.js.pipe(gulp.dest("dist/js"));
+gulp.task("js", function (cb) {
+    pump([
+        gulp.src("src/js/*.ts"),
+        ts(),
+        uglify(),
+        gulp.dest("dist/js")
+    ], cb);
 });
 
 gulp.task("html", function () {
