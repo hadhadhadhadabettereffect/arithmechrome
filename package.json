@@ -4,14 +4,14 @@
   "description": "chrome extension to colorize numbers in text",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hadhadhadhadabettereffect/optarithm.git"
+    "url": "git+https://github.com/hadhadhadhadabettereffect/arithmechrome.git"
   },
   "author": "Eric Birkeland <ericjbirkeland@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hadhadhadhadabettereffect/optarithm/issues"
+    "url": "https://github.com/hadhadhadhadabettereffect/arithmechrome/issues"
   },
-  "homepage": "https://github.com/hadhadhadhadabettereffect/optarithm#readme",
+  "homepage": "https://github.com/hadhadhadhadabettereffect/arithmechrome#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-csso": "^3.0.1",
